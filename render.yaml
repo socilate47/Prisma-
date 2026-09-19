@@ -1,5 +1,5 @@
 ##############################################################################
-# Anatomy Atelier / ED-TECH-3D — Render Blueprint
+# Anatomy Atelier / Prisma — Render Blueprint
 #
 # This file tells Render how to build and run the 3D anatomy app as a
 # persistent Node web service. Do not use Render Static Site: the app needs
@@ -13,7 +13,7 @@
 # ---------------------------------------------------------------------------
 # How to deploy (Dashboard)
 # ---------------------------------------------------------------------------
-# 1. Push this repo to GitHub (ProximaOpal/ED-TECH-3D, branch main).
+# 1. Push this repo to GitHub (IanDev-cmd/Prisma-, branch main).
 # 2. Sign in at https://dashboard.render.com
 # 3. New + -> Blueprint
 # 4. Connect the GitHub repo that contains this render.yaml
@@ -51,7 +51,7 @@ services:
     plan: starter
     region: frankfurt
     branch: main
-    repo: https://github.com/ProximaOpal/ED-TECH-3D.git
+    repo: https://github.com/IanDev-cmd/Prisma-.git
     autoDeployTrigger: commit
     # / redirects to /en; Render health checks need a 2xx, not a 3xx
     healthCheckPath: /en

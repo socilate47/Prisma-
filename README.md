@@ -1,8 +1,8 @@
-# vinext-starter
+# ED-TECH-3D
 
-A clean full-stack starter running on
-[vinext](https://github.com/cloudflare/vinext), with optional Cloudflare D1 and
-Drizzle support.
+Anatomy Atelier — a 3D anatomy learning app. Local development uses
+[vinext](https://github.com/cloudflare/vinext); Render production uses Next.js
+(see `render.yaml`).
 
 ## Prerequisites
 

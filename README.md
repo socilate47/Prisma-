@@ -1,4 +1,4 @@
-# ED-TECH-3D
+# Prisma-
 
 Anatomy Atelier — a 3D anatomy learning app. Local development uses
 [vinext](https://github.com/cloudflare/vinext); Render production uses Next.js

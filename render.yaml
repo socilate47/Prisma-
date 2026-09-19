@@ -1,0 +1,69 @@
+##############################################################################
+# Anatomy Atelier / ED-TECH-3D — Render Blueprint
+#
+# This file tells Render how to build and run the 3D anatomy app as a
+# persistent Node web service. Do not use Render Static Site: the app needs
+# Next.js SSR (locale layouts, redirects from / to /en, server metadata).
+#
+# Do not use `npm start` or `npm run build` here. Those scripts run vinext /
+# Wrangler (Cloudflare). Render is not Cloudflare. Use the Next.js path:
+#   build  -> npm run build:next   (same as vercel.json)
+#   start  -> next start on 0.0.0.0:$PORT
+#
+# ---------------------------------------------------------------------------
+# How to deploy (Dashboard)
+# ---------------------------------------------------------------------------
+# 1. Push this repo to GitHub (ProximaOpal/ED-TECH-3D, branch main).
+# 2. Sign in at https://dashboard.render.com
+# 3. New + -> Blueprint
+# 4. Connect the GitHub repo that contains this render.yaml
+# 5. Render reads this file and creates the `ed-tech-3d` web service
+# 6. After the first live URL exists, set NEXT_PUBLIC_SITE_URL to that
+#    https://….onrender.com origin (or your custom domain) and redeploy so
+#    og:image / metadataBase match the public host
+# 7. Optional: Dashboard -> service -> Settings -> Custom Domains
+#
+# CLI alternative (after `npm i -g render`):
+#   render blueprints validate render.yaml
+#   render blueprints apply
+#
+# ---------------------------------------------------------------------------
+# Plan
+# ---------------------------------------------------------------------------
+# Use Starter (~$7). Do not use Free: the instance sleeps and the 3D viewer
+# plus Next.js SSR will time out on cold start. Do not use Pro unless you
+# explicitly want the $85 tier.
+# If `next build` is killed (OOM), bump this service to Standard (2 GB) in
+# the Dashboard or change `plan` below to `standard`.
+#
+# ---------------------------------------------------------------------------
+# After deploy
+# ---------------------------------------------------------------------------
+# Health: GET https://<service>.onrender.com/en  should return 200
+# Root:   GET https://<service>.onrender.com/    redirects to /en
+# Logs:   Dashboard -> service -> Logs
+##############################################################################
+
+services:
+  - type: web
+    name: ed-tech-3d
+    runtime: node
+    plan: starter
+    region: frankfurt
+    branch: main
+    repo: https://github.com/ProximaOpal/ED-TECH-3D.git
+    autoDeployTrigger: commit
+    # / redirects to /en; Render health checks need a 2xx, not a 3xx
+    healthCheckPath: /en
+    buildCommand: npm ci && npm run build:next
+    startCommand: npx next start --hostname 0.0.0.0 --port $PORT
+    envVars:
+      # package.json engines.node is >=22.13.0
+      - key: NODE_VERSION
+        value: "22.13.0"
+      - key: NODE_ENV
+        value: production
+      # Set in the Dashboard after the first deploy to the public origin,
+      # e.g. https://ed-tech-3d.onrender.com — used for metadataBase / OG URLs
+      - key: NEXT_PUBLIC_SITE_URL
+        sync: false
